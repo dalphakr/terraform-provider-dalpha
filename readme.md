@@ -1,5 +1,8 @@
-~/.terraformrc 설정
+# dalpha-terraform-provider
 
+### ~/.terraformrc 설정
+
+```
 provider_installation {
 
   dev_overrides {
@@ -11,6 +14,9 @@ provider_installation {
   # the dev_overrides block, and so no other providers will be available.
   direct {}
 }
+```
 
+```
 cd dalpha-infra/terraform/openai
-vim .envrc 
+vim .envrc
+```
