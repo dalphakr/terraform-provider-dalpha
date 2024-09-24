@@ -44,7 +44,7 @@ func ExistsVault(comm Common, project string, entity string) (bool, error) {
 		return false, err
 	}
 
-	m, err := client.Secrets.KvV2Read(ctx, fmt.Sprintf("openai/%s", project),
+	m, err := client.Secrets.KvV2Read(ctx, fmt.Sprintf("openai/%s/%s", project, entity),
 		vault.WithMountPath("secret"))
 	if err != nil {
 		return false, err
@@ -63,13 +63,13 @@ func InsertVault(comm Common, project string, entity string, api_key string) err
 		return err
 	}
 
-	m, err := client.Secrets.KvV2Read(ctx, fmt.Sprintf("openai/%s", project), vault.WithMountPath("secret"))
+	m, err := client.Secrets.KvV2Read(ctx, fmt.Sprintf("openai/%s/%s", project, entity), vault.WithMountPath("secret"))
 	// check if err is InvalidPath
 	if vault.IsErrorStatus(err, 404) {
 		// write a secret
 		_, err = client.Secrets.KvV2Write(
 			ctx,
-			fmt.Sprintf("openai/%s", project),
+			fmt.Sprintf("openai/%s/%s", project, entity),
 			schema.KvV2WriteRequest{
 				Data: map[string]any{
 					entity: api_key,
@@ -90,7 +90,7 @@ func InsertVault(comm Common, project string, entity string, api_key string) err
 		if err != nil {
 			return fmt.Errorf("failed to get version: %s", err)
 		}
-		err = KvV2Patch(fmt.Sprintf("openai/%s", project), uint(ver), map[string]any{
+		err = KvV2Patch(fmt.Sprintf("openai/%s/%s", project, entity), uint(ver), map[string]any{
 			entity: api_key,
 		})
 		if err != nil {
